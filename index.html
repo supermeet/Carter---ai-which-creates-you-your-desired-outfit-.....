@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carter - Your AI Fashion Destination</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+
+    <style>
+        /* --- General & Reset Styles --- */
+        :root {
+            --primary-color: #d50032; /* A fashion-forward pink/red */
+            --secondary-color: #333333;
+            --background-color: #ffffff;
+            --light-gray: #f5f5f5;
+            --text-color: #222222;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- Header & Navigation --- */
+        header {
+            padding: 1rem 0;
+            border-bottom: 1px solid #e0e0e0;
+            background-color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: var(--light-gray);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            margin-left: 0.5rem;
+        }
+
+        .nav-actions .icon {
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .nav-actions .icon:hover {
+            color: var(--primary-color);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 60vh;
+            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #b00028;
+        }
+
+        /* --- Product Grid --- */
+        .product-section {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 1rem;
+        }
+
+        .product-brand {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .product-name {
+            color: #666;
+            margin-bottom: 0.75rem;
+        }
+
+        .product-price {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .product-price .original-price {
+            text-decoration: line-through;
+            color: #999;
+            margin-left: 0.5rem;
+            font-weight: 400;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--secondary-color);
+            color: #fff;
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between; /* Adjusted to push items to the ends */
+            flex-wrap: wrap;
+        }
+
+        .footer-section {
+            margin: 1rem;
+            text-align: left; /* Aligns text to the left within each section */
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #fff;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            border-top: 1px solid #444;
+            padding-top: 2rem;
+        }
+
+        .contact-info { /* New styles for contact section */
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #444;
+        }
+        
+        .contact-info h4 {
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .contact-info p {
+            margin-bottom: 0.5rem;
+            color: #ccc;
+        }
+        
+        .contact-info a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-info a:hover {
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">Carter</a>
+            <ul class="nav-links">
+                <li><a href="#">Men</a></li>
+                <li><a href="#">Women</a></li>
+                <li><a href="#">Kids</a></li>
+                <li><a href="#">Beauty</a></li>
+                <li><a href="#">Studio</a></li>
+            </ul>
+            <div class="nav-actions">
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search for products...">
+                </div>
+                <a href="#" class="icon"><i class="fa-regular fa-user"></i></a>
+                <a href="#" class="icon"><i class="fa-regular fa-heart"></i></a>
+                <a href="#" class="icon"><i class="fa-solid fa-bag-shopping"></i></a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Find Your Next Look</h1>
+                <p>Unleash your style with our curated collections and AI-powered recommendations.</p>
+                <a href="#" class="cta-button">Shop Now</a>
+            </div>
+        </section>
+
+        <section class="product-section container">
+            <h2 class="section-title">Trending Now</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1588117260148-b47818742c74?q=80&w=1887&auto=format&fit=crop" alt="Floral Dress">
+                    <div class="product-info">
+                        <h3 class="product-brand">Tokyo Talkies</h3>
+                        <p class="product-name">Women Floral Print Dress</p>
+                        <p class="product-price">$24.99 <span class="original-price">$49.99</span></p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=1887&auto=format&fit=crop" alt="White T-Shirt">
+                    <div class="product-info">
+                        <h3 class="product-brand">H&M</h3>
+                        <p class="product-name">Men Solid Cotton T-Shirt</p>
+                        <p class="product-price">$15.00</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?q=80&w=1972&auto=format&fit=crop" alt="Grey Sweatshirt">
+                    <div class="product-info">
+                        <h3 class="product-brand">Nike</h3>
+                        <p class="product-name">Unisex Sportswear Sweatshirt</p>
+                        <p class="product-price">$59.50 <span class="original-price">$80.00</span></p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1598554747478-36421f58dae0?q=80&w=1887&auto=format&fit=crop" alt="Running Shoes">
+                    <div class="product-info">
+                        <h3 class="product-brand">Puma</h3>
+                        <p class="product-name">Men's Running Shoes</p>
+                        <p class="product-price">$89.99</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                 <div class="footer-section">
+                    <h4>ONLINE SHOPPING</h4>
+                    <a href="#">Men</a>
+                    <a href="#">Women</a>
+                    <a href="#">Kids</a>
+                    <a href="#">Gift Cards</a>
+                </div>
+                <div class="footer-section">
+                    <h4>USEFUL LINKS</h4>
+                    <a href="#">Contact Us</a>
+                    <a href="#">FAQ</a>
+                    <a href="#">Shipping</a>
+                    <a href="#">Returns</a>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 Carter. All Rights Reserved.
+            </div>
+            <div class="contact-info">
+                <h4>KEEP IN TOUCH</h4>
+                <p><a href="mailto:founder@carterai.in">Email: founder@carterai.in</a></p>
+                <p><a href="tel:+919405582136">Phone: +91 9405582136</a></p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script type="module">
+        import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+        createChat({
+            webhookUrl: 'https://superm.app.n8n.cloud/webhook/05025644-455c-4560-bd5e-ac8b2526a748/chat'
+        });
+    </script>
+
+</body>
+</html>
