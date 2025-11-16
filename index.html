@@ -1,407 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carter - Your AI Fashion Destination</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Video Generator</title>
+    <style>
+        /* --- 1. General Styling --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            
+            /* --- YOUR UPDATED BACKGROUND --- */
+            background-image: linear-gradient(to right, #0085CA, #62cff4);
+            /* --- YOUR UPDATED BACKGROUND --- */
+            
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+        /* --- 2. Main Container --- */
+        .container {
+            background-color: #eaeaea; /* White card background */
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+            padding: 2rem 2.5rem;
+            width: 100%;
+            max-width: 600px;
+        }
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        /* --- 3. Header --- */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+            color: #222;
+        }
+        .header p {
+            font-size: 1rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
 
-    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+        /* --- 4. Form Styling --- */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
 
-    <style>
-        /* --- General & Reset Styles --- */
-        :root {
-            --primary-color: #d50032; /* A fashion-forward pink/red */
-            --secondary-color: #333333;
-            --background-color: #ffffff;
-            --light-gray: #f5f5f5;
-            --text-color: #222222;
-        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #444;
+        }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* Input field for the idea */
+        #idea-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            box-sizing: border-box; /* Ensures padding doesn't affect width */
+        }
+        
+        #idea-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
+        }
 
-        body {
-            font-family: 'Lato', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-        }
+        /* --- 5. Style Options (Radio Buttons) --- */
+        .style-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+        }
 
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .style-options .radio-label {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+            font-weight: 500;
+        }
 
-        /* --- Header & Navigation --- */
-        header {
-            padding: 1rem 0;
-            border-bottom: 1px solid #e0e0e0;
-            background-color: #fff;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+        .style-options input[type="radio"] {
+            margin-right: 0.75rem;
+            /* Modern custom radio button appearance */
+            accent-color: #007bff;
+        }
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .style-options .radio-label:hover {
+            background-color: #f8f9fa;
+        }
 
-        .logo {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text-color);
-            text-decoration: none;
-        }
+        /* Style for the selected radio button's label */
+        .style-options input[type="radio"]:checked + .radio-label {
+            border-color: #007bff;
+            background-color: #f0f8ff;
+            color: #0056b3;
+            font-weight: 600;
+        }
 
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
+        /* Hide the actual radio button */
+        .style-options input[type="radio"] {
+            display: none;
+        }
 
-        .nav-links a {
-            text-decoration: none;
-            color: var(--secondary-color);
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
+        /* --- 6. Button and Loading Message --- */
+        .submit-btn {
+            width: 100%;
+            padding: 0.85rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
 
-        .nav-links a:hover {
-            color: var(--primary-color);
-        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+        
+        .submit-btn:active {
+            transform: scale(0.99);
+        }
+        
+        /* Style for when the button is "loading" */
+        .submit-btn:disabled {
+            background-color: #a0a0a0;
+            cursor: not-allowed;
+        }
 
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
+        #loading-message {
+            display: none; /* Hidden by default */
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #555;
+            font-style: italic;
+        }
 
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background-color: var(--light-gray);
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-        }
-
-        .search-bar input {
-            border: none;
-            background: transparent;
-            outline: none;
-            margin-left: 0.5rem;
-        }
-
-        .nav-actions .icon {
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .nav-actions .icon:hover {
-            color: var(--primary-color);
-        }
-
-        /* --- Hero Section --- */
-        .hero {
-            height: 60vh;
-            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: #fff;
-        }
-
-        .hero-content {
-            max-width: 600px;
-        }
-
-        .hero h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-        }
-
-        .cta-button {
-            background-color: var(--primary-color);
-            color: #fff;
-            padding: 1rem 2.5rem;
-            text-decoration: none;
-            font-weight: 700;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        .cta-button:hover {
-            background-color: #b00028;
-        }
-
-        /* --- Product Grid --- */
-        .product-section {
-            padding: 4rem 0;
-        }
-
-        .section-title {
-            text-align: center;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2.5rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .product-card {
-            background: #fff;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .product-card img {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-        }
-
-        .product-info {
-            padding: 1rem;
-        }
-
-        .product-brand {
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-        }
-
-        .product-name {
-            color: #666;
-            margin-bottom: 0.75rem;
-        }
-
-        .product-price {
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-        
-        .product-price .original-price {
-            text-decoration: line-through;
-            color: #999;
-            margin-left: 0.5rem;
-            font-weight: 400;
-        }
-
-        /* --- Footer --- */
-        footer {
-            background-color: var(--secondary-color);
-            color: #fff;
-            padding: 3rem 0;
-            margin-top: 4rem;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between; /* Adjusted to push items to the ends */
-            flex-wrap: wrap;
-        }
-
-        .footer-section {
-            margin: 1rem;
-            text-align: left; /* Aligns text to the left within each section */
-        }
-
-        .footer-section h4 {
-            margin-bottom: 1rem;
-        }
-
-        .footer-section a {
-            color: #ccc;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 0.5rem;
-            transition: color 0.3s ease;
-        }
-
-        .footer-section a:hover {
-            color: #fff;
-        }
-        
-        .copyright {
-            text-align: center;
-            margin-top: 2rem;
-            border-top: 1px solid #444;
-            padding-top: 2rem;
-        }
-
-        .contact-info { /* New styles for contact section */
-            text-align: center;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #444;
-        }
-        
-        .contact-info h4 {
-            font-family: 'Montserrat', sans-serif;
-            margin-bottom: 1rem;
-            color: #fff;
-        }
-
-        .contact-info p {
-            margin-bottom: 0.5rem;
-            color: #ccc;
-        }
-        
-        .contact-info a {
-            color: #ccc;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .contact-info a:hover {
-            color: #fff;
-        }
-
-    </style>
+    </style>
 </head>
 <body>
 
-    <header>
-        <nav class="container">
-            <a href="#" class="logo">Carter</a>
-            <ul class="nav-links">
-                <li><a href="#">Men</a></li>
-                <li><a href="#">Women</a></li>
-                <li><a href="#">Kids</a></li>
-                <li><a href="#">Beauty</a></li>
-                <li><a href="#">Studio</a></li>
-            </ul>
-            <div class="nav-actions">
-                <div class="search-bar">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="Search for products...">
-                </div>
-                <a href="#" class="icon"><i class="fa-regular fa-user"></i></a>
-                <a href="#" class="icon"><i class="fa-regular fa-heart"></i></a>
-                <a href="#" class="icon"><i class="fa-solid fa-bag-shopping"></i></a>
-            </div>
-        </nav>
-    </header>
+    <div class="container">
+        <div class="header">
+            <h1>AI Video Generator</h1>
+            <p>Bring your creative ideas to life in any style.</p>
+        </div>
 
-    <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h1>Find Your Next Look</h1>
-                <p>Unleash your style with our curated collections and AI-powered recommendations.</p>
-                <a href="#" class="cta-button">Shop Now</a>
-            </div>
-        </section>
+        <form id="video-form">
+            
+            <div class="form-group">
+                <label for="idea-input">What's on your mind?</label>
+                <textarea id="idea-input" placeholder="e.g., A corgi astronaut planting a flag on the moon" required></textarea>
+            </div>
 
-        <section class="product-section container">
-            <h2 class="section-title">Trending Now</h2>
-            <div class="product-grid">
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?q=80&w=1935&auto=format&fit=crop" alt="Floral Dress">
-                    <div class="product-info">
-                        <h3 class="product-brand">Tokyo Talkies</h3>
-                        <p class="product-name">Women Floral Print Dress</p>
-                        <p class="product-price">$24.99 <span class="original-price">$49.99</span></p>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=1887&auto=format&fit=crop" alt="White T-Shirt">
-                    <div class="product-info">
-                        <h3 class="product-brand">H&M</h3>
-                        <p class="product-name">Men Solid Cotton T-Shirt</p>
-                        <p class="product-price">$15.00</p>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?q=80&w=1972&auto=format&fit=crop" alt="Grey Sweatshirt">
-                    <div class="product-info">
-                        <h3 class="product-brand">Nike</h3>
-                        <p class="product-name">Unisex Sportswear Sweatshirt</p>
-                        <p class="product-price">$59.50 <span class="original-price">$80.00</span></p>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop" alt="Running Shoes">
-                    <div class="product-info">
-                        <h3 class="product-brand">Puma</h3>
-                        <p class="product-name">Men's Running Shoes</p>
-                        <p class="product-price">$89.99</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+            <div class="form-group">
+                <label>Choose a Style  </label>
+                <div class="style-options">
+                    
+                    <div>
+                        <input type="radio" id="style-sketch" name="video-style" value="sketch">
+                        <label for="style-sketch" class="radio-label">✏️ Sketch</label>
+                    </div>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                 <div class="footer-section">
-                    <h4>ONLINE SHOPPING</h4>
-                    <a href="#">Men</a>
-                    <a href="#">Women</a>
-                    <a href="#">Kids</a>
-                    <a href="#">Gift Cards</a>
-                </div>
-                <div class="footer-section">
-                    <h4>USEFUL LINKS</h4>
-                    <a href="#">Contact Us</a>
-                    <a href="#">FAQ</a>
-                    <a href="#">Shipping</a>
-                    <a href="#">Returns</a>
-                </div>
-            </div>
-            <div class="copyright">
-                &copy; 2025 Carter. All Rights Reserved.
-            </div>
-            <div class="contact-info">
-                <h4>KEEP IN TOUCH</h4>
-                <p><a href="mailto:founder@carterai.in">Email: founder@carterai.in</a></p>
-                <p><a href="tel:+919405582136">Phone: +91 9405582136</a></p>
-            </div>
-        </div>
-    </footer>
+                    <div>
+                        <input type="radio" id="style-anime" name="video-style" value="anime">
+                        <label for="style-anime" class="radio-label">🎌 Anime</label>
+                    </div>
 
+                    <div>
+                        <input type="radio" id="style-90s" name="video-style" value="90s">
+                        <label for="style-90s" class="radio-label">📼 90's</label>
+                    </div>
 
-    <script type="module">
-        import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+                    <div>
+                        <input type="radio" id="style-realistic" name="video-style" value="realistic" checked>
+                        <label for="style-realistic" class="radio-label">📷 Realistic</label>
+                    </div>
 
-        createChat({
-            // ## UPDATED WEBHOOK URL ##
-            webhookUrl: 'https://superm000.app.n8n.cloud/webhook/176a026b-2f5d-4b6d-a059-315f4d9f27f2/chat'
-        });
-    </script>
+                </div>
+            </div>
 
-</body>
-</html>
+            <button type="submit" class="submit-btn" id="generate-btn">
+                Generate Video
+            </button>
+
+        </form>
+
+        <div id="result-container">
+            <p id="loading-message">🚀 Generating your video... this may take a moment.</p>
